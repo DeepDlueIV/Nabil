@@ -1,0 +1,24 @@
+name: Check portfolio
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - run: npm run check
+      - run: node --check assets/app.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nabil-static-site
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
